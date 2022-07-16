@@ -86,12 +86,12 @@ void ChessPiece :: generatepseudoMoves(Board &b){
 
        //left // right
        y=this->position.y-1;
-       if(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color ){
+       if((b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)||b.enpasant==Box(x,y)){
         moves[totalmoves]=Box(x,y);
         totalmoves+=1;
        }
        y=this->position.y+1;
-       if(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color ){
+       if((b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)||b.enpasant==Box(x,y) ){
         moves[totalmoves]=Box(x,y);
         totalmoves+=1;
        }

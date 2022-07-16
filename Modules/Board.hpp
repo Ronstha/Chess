@@ -168,9 +168,9 @@ class Board{
 
       }
       int move_piece(ChessPiece pc,Box b,bool legal=true){
-        int displacement;
+
+        int displacement=sqrt(pow((pc.position.x-b.x),2)+pow((pc.position.y-b.y),2));
         if(legal){
-        displacement=sqrt(pow((pc.position.x-b.x),2)+pow((pc.position.y-b.y),2));
         int isLegal=0;
             for(int i=0;i<pc.totalmoves;i++){
                 if(pc.moves[i]==b){
@@ -186,11 +186,9 @@ class Board{
             captured[!pc.color][this->capture_insertIndex(!pc.color)]=capturedpiece;
                         
         }
-        if(legal){
-            if(displacement==2 && pc.rank==1){
-                this->enpasant=b;
-
-            }
+        
+       
+            
             if(pc.rank==6){
                 castling[currentTurn][0]=false;
                 castling[currentTurn][1]=false;
@@ -204,11 +202,23 @@ class Board{
                 castling[currentTurn][0]=false;
 
             }
-        }
-  
+           if((this->enpasant.is_valid())&&(pc.rank==1)&&(b==this->enpasant)){
+                
+            chessBoard[b.x][pc.position.y]=ChessPiece();   
+        
+           }
+         
+        
         chessBoard[pc.position.x][pc.position.y]=ChessPiece ();        
         pc.position=b;
         chessBoard[b.x][b.y]=pc;
+         this->enpasant=Box();
+           
+            if(displacement==2 && pc.rank==1){
+                this->enpasant=Box(this->enpasant.x,this->enpasant.y+1+(-2*this->currentTurn));
+
+            }
+        
         if(legal){
           
           return this->check_checkmate(!pc.color);
