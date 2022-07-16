@@ -11,12 +11,10 @@ GAMESTATE
 class Engine{
     Board b;
     char gameState;
-    char playerTurn;
     char check;
     public:
         Engine(){
             gameState=1;
-            playerTurn=0;
             check=0;
       
      
@@ -24,7 +22,7 @@ class Engine{
         }   
         void game_loop(){
             while(this->gameState!=0){
-                if(playerTurn==0){
+                if(b.get_turn()==0){
                     std::cout << "White's Turn" << std :: endl;
                 }              
                 else{
@@ -36,11 +34,11 @@ class Engine{
                     
                 }
                 b.print_board();
-                b.generateMoves(this->playerTurn);
-                if(b.countMoves(this->playerTurn)==0){
+                b.generateMoves();
+                if(b.countMoves()==0){
                         this->gameState=0;
                     if(this->check){
-                        if(this->playerTurn==0){
+                        if(b.get_turn()==0){
                             std:: cout << "BLACK WINS!!";
                         }
                         else{
@@ -56,17 +54,14 @@ class Engine{
                 }
 
                 this->piece_selection();
-                this->switch_turn();
+                b.switch_turn();
 
 
 
             }
 
         }
-        void switch_turn(){
-            this->playerTurn=!playerTurn;            
-        }
-
+     
         void piece_selection(){
                 this->gameState=2;
                  ChessPiece pice;
@@ -80,7 +75,7 @@ class Engine{
                 std::cin>>x>>y;
                 if((x>=0 && x<8)&&(y>=0 && y<8)){         
                  pice= b.get_chesspiece(x,y);
-                 if((pice.rank>0)&&(pice.color==this->playerTurn)){
+                 if((pice.rank>0)&&(pice.color==b.get_turn())){
                     if(pice.totalmoves==0){
                     std :: cout<<"No Move Available"<<std::endl;
 

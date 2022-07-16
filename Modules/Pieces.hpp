@@ -35,13 +35,24 @@ class Box{
     void display(){
       std::cout << x <<","<<y<<std::endl;
     }
-  
+    bool is_valid(){
+      if(x<0||y<0){
+        return 0;
+      }
+      return 1;
+    }
+    void setNull(){
+x=-1;
+      y=-1;
+    } 
+
 };
 class ChessPiece{
     int rank;
     int color;
     Box position;
     Box moves[64];
+    bool castling;
     friend class Board;
     friend class Engine;
     public:
@@ -51,7 +62,12 @@ class ChessPiece{
       ChessPiece(){
         this->rank=0;
         this->color=10;
+        this->castling=false;
       };
+      void set_castling(bool cast){
+        this->castling=cast;
+
+      }
       void set_color(int color){
         this->color=color;
       }

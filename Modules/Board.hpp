@@ -18,6 +18,7 @@ ChessPiece get_piece(char a){
         break;
     case 'r':
         temp.set_rank(2);
+        temp.set_castling(true);
         break;
     case 'n':
         temp.set_rank(3);
@@ -30,6 +31,7 @@ ChessPiece get_piece(char a){
         break;
     case 'k':
         temp.set_rank(6);
+        temp.set_castling(true);
         break;
     
     default:
@@ -42,17 +44,22 @@ ChessPiece get_piece(char a){
 class Board{
     ChessPiece chessBoard[8][8];
     ChessPiece captured[2][16];
+    bool castling[2][2];
+     int currentTurn;
+     Box enpasant;
      friend class ChessPiece;
     // friend class Engine;
     public:
       Board(){
-        parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-        // parse_fen("rnbqkbnr/1ppppppp/8/p7/8/4PQ2/PPPP1PPP/RNB1KBNR");
+        parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -");
+        // parse_fen("rnbqkbnr/1ppppppp/8/p7/8/4PQ2/PPPP1PPP/RNB1KBNR b");
       }
       void parse_fen(std:: string fen){
         int x=0;
         int y=0;
-        for (int i=0;i<fen.length();i++){
+        int i=0;
+        //chess Pieces
+        while(fen[i]!=' '){
             if(fen[i]=='/'){
                 x+=1;
                 y=0;
@@ -65,8 +72,54 @@ class Board{
                 // std::cout << x <<" "<<y ;
                 chessBoard[x][y]=get_piece(fen[i]);
                 chessBoard[x][y].setPosition(x,y);
+                
                 y+=1;
             }
+            i+=1;
+        }
+        //turn
+        i+=1;
+        if(fen[i]=='w'){
+            currentTurn=0;
+        }else if(fen[i]=='b'){
+            currentTurn=1;
+
+        }
+        i+=2;
+        //castling
+        castling[0][0]=false;
+        castling[0][1]=false;
+        castling[1][0]=false;
+        castling[1][1]=false;
+        while(fen[i]!=' '){
+            switch( fen[i]){
+                case 'k':
+                    castling[1][0]=true;
+                    break;
+                case 'K':
+                    castling[0][0]=true;
+                    break;
+                case 'Q':
+                    castling[0][1]=true;
+                    break;
+                case 'q':
+                    castling[1][1]=true;
+                    break;
+                default:
+                break;
+            }
+
+            i+=1;
+        }
+        //enpasant
+        i+=1;
+        if(fen[i]=='-'){
+
+        }
+        else{
+        enpasant.y=fen[i]-97;
+        enpasant.x=56-fen[i+1];
+
         }
 
         
@@ -85,25 +138,12 @@ class Board{
             std:: cout << std::endl;
         }        
       }
-    //   void print_moves(int m,int n){
-    //    std:: cout<<std::endl<<std::endl;
-    //     chessBoard[m][n].generateLegalMoves(*this);
-
-    //     chessBoard[m][n].moves;
-    //     int i,j;
-    //     for(i=0;i<8;i++){
-    //         for( j=0;j<8;j++){
-    //             chessBoard[i][j].display_string();
-    //             for(int l=0;l<chessBoard[m][n].totalmoves;l++){
-    //                 if(chessBoard[m][n].moves[l].x==i && chessBoard[m][n].moves[l].y==j){
-    //                     std :: cout <<"\b\bx ";
-    //                     break;
-    //                 }
-    //             }
-    //         }          
-    //         std:: cout << std::endl;
-    //     }        
-    //   }
+      int get_turn(){
+       return this->currentTurn;
+      }
+      void switch_turn(){
+        this->currentTurn=!this->currentTurn;
+      }
       int capture_insertIndex(int color){
         for(int i=0;i<16;i++){
             if(captured[color][i].rank==0){
@@ -182,21 +222,21 @@ class Board{
         
         return 0;
       }
-      void generateMoves(int player){
+      void generateMoves(){
        for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                if(this->chessBoard[i][j].color==player){
+                if(this->chessBoard[i][j].color==this->currentTurn){
 
                    this->chessBoard[i][j].generateLegalMoves(*this);
                 }
             }    
       }
       }
-      int countMoves(int player){
+      int countMoves(){
         int moves=0;
        for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                if(this->chessBoard[i][j].color==player){
+                if(this->chessBoard[i][j].color==this->currentTurn){
 
                   moves+=chessBoard[i][j].totalmoves;
                 }
