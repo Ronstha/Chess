@@ -2,13 +2,13 @@ void ChessPiece :: knight (int ix,int iy,Board &b){
     if(this->rank!=3) return;
     int x=this->position.x+ix;
     int y=this->position.y+iy;
-    // std::cout << this->position.x <<this->position.y<<std::endl;
+ 
     if(x>=0 && x<8 && y>=0 && y<8){
         //exist in board
        if (b.chessBoard[x][y].rank==0||(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)){
     
         moves[totalmoves]=Box(x,y);
-        // std::cout<<x<<y<<ix<<iy<<std::endl;
+      
         totalmoves+=1;
        }
     }
@@ -22,8 +22,10 @@ void ChessPiece :: rook (int ix,int iy,Board &b){
         x+=ix;
         y+=iy;
         if(b.chessBoard[x][y].rank==0 || ( b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)){
-               moves[totalmoves]=Box(x,y);
+              moves[totalmoves]=Box(x,y);
+              // moves[totalmoves].display();
         totalmoves+=1;
+        if(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)break;
         }
         else{
             break;
@@ -37,13 +39,16 @@ void ChessPiece :: bishop (int ix,int iy,Board &b){
     if(this->rank!=4 && this->rank!=5) return;
      int x=this->position.x;
     int y=this->position.y;
+    // std::cout<<x;
 
-    while(x!=int(((ix+1)*7)/2) || y!=int(((iy+1)*7)/2)){
+    while(x!=int(((ix+1)*7)/2) && y!=int(((iy+1)*7)/2)){
         x+=ix;
         y+=iy;
+        // std::cout<<x;
         if(b.chessBoard[x][y].rank==0 || ( b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)){
  moves[totalmoves]=Box(x,y);
         totalmoves+=1;
+        if(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)break;
         }
         else{
             break;
@@ -69,6 +74,7 @@ void ChessPiece :: generatepseudoMoves(Board &b){
         moves[totalmoves]=Box(x,y);
         totalmoves+=1;
        }
+
        if(this->position.x==(6-(this->color*5))){
         x=this->position.x-2+(4*this->color);
         y=this->position.y;
@@ -197,17 +203,19 @@ this->rook(0,1,b);
 void ChessPiece :: removeMoves(int pos){
   this->totalmoves-=1;
   this->moves[pos]=this->moves[this->totalmoves];
-
+  
 
 }
 void ChessPiece :: generateLegalMoves(Board &b){
   Board temp;
+ 
   this->generatepseudoMoves(b);
-  for(int k=0;k<this->totalmoves;k++){
+  int total=this->totalmoves;
+  for(int k=0;k<total;k++){
     temp=b;
+  
     if(temp.move_piece(*this,this->moves[k],false)){
       this->removeMoves(k);
-
     }
 
     

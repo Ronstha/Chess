@@ -10,8 +10,8 @@ color
 0-white
 1-black
 */
-class Board;
-char pcs[7]={' ','p','r','k','b','q','k'};
+
+char pcs[7]={' ','p','r','n','b','q','k'};
 class Box{
     public:
     int x;
@@ -32,7 +32,10 @@ class Box{
       return 0;
 
     }
-    
+    void display(){
+      std::cout << x <<","<<y<<std::endl;
+    }
+  
 };
 class ChessPiece{
     int rank;
@@ -40,13 +43,14 @@ class ChessPiece{
     Box position;
     Box moves[64];
     friend class Board;
+    friend class Engine;
     public:
 
       int totalmoves;
 
       ChessPiece(){
         this->rank=0;
-        this->color=0;
+        this->color=10;
       };
       void set_color(int color){
         this->color=color;
