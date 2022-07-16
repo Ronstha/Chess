@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 class Board;
 class Engine;
 class Piece;
