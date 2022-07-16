@@ -85,13 +85,15 @@ void ChessPiece :: generatepseudoMoves(Board &b){
        }
 
        //left // right
+       x=this->position.x-1+(2*this->color);
        y=this->position.y-1;
        if((b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)||b.enpasant==Box(x,y)){
         moves[totalmoves]=Box(x,y);
         totalmoves+=1;
+     
        }
        y=this->position.y+1;
-       if((b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)||b.enpasant==Box(x,y) ){
+       if((b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color)||b.enpasant==Box(x,y)){
         moves[totalmoves]=Box(x,y);
         totalmoves+=1;
        }
@@ -206,7 +208,7 @@ void ChessPiece :: removeMoves(int pos){
   
 
 }
-void ChessPiece :: generateLegalMoves(Board &b){
+void ChessPiece :: generateLegalMoves(Board &b){ 
   Board temp;
  
   this->generatepseudoMoves(b);

@@ -46,12 +46,13 @@ class Board{
     ChessPiece captured[2][16];
     bool castling[2][2];
      int currentTurn;
-     Box enpasant;
      friend class ChessPiece;
+     Box enpasant;
     // friend class Engine;
     public:
       Board(){
-        parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -");
+        // parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -");
+        parse_fen("rnbqkbnr/1ppppppp/p7/4P3/8/8/PPPP1PPP/RNBQKBNR b kqKQ -");
         // parse_fen("rnbqkbnr/1ppppppp/8/p7/8/4PQ2/PPPP1PPP/RNB1KBNR b");
       }
       void parse_fen(std:: string fen){
@@ -204,7 +205,7 @@ class Board{
             }
            if((this->enpasant.is_valid())&&(pc.rank==1)&&(b==this->enpasant)){
                 
-            chessBoard[b.x][pc.position.y]=ChessPiece();   
+            chessBoard[pc.position.x][b.y]=ChessPiece();   
         
            }
          
@@ -215,7 +216,7 @@ class Board{
          this->enpasant=Box();
            
             if(displacement==2 && pc.rank==1){
-                this->enpasant=Box(this->enpasant.x,this->enpasant.y+1+(-2*this->currentTurn));
+                this->enpasant=Box(b.x+1+(-2*this->currentTurn),b.y);
 
             }
         

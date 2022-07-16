@@ -42,8 +42,7 @@ class Box{
       return 1;
     }
     void setNull(){
-x=-1;
-      y=-1;
+
     } 
 
 };
