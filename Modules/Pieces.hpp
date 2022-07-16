@@ -79,6 +79,11 @@ class ChessPiece{
       void bishop(int,int,Board &);
       void rook(int,int,Board &);
       void removeMoves(int);
+      void promoteTo(int rank){
+        this->rank=rank+1;
+
+      }
+
 
 };
 

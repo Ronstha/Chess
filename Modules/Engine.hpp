@@ -71,6 +71,7 @@ class Engine{
                 this->gameState=2;
                  ChessPiece pice;
                 int x,y;
+                int prom;
                 bool available;
                 Box current;
                 while (this->gameState==2)
@@ -105,6 +106,21 @@ class Engine{
                    }
                    if(available){
                     this->check=b.move_piece(pice,current);
+                    if(pice.rank==1 && (current.x==0|current.x==7)){
+                        std::cout << "PROMOTE PAwN:"<<std::endl<<"1.Rook 2.Knight 3.Bishop 4.Queen"<<std::endl;
+                        while (1)
+                        {
+                            std::cin>> prom;
+                            if (prom>0 && prom<5){
+                                b.get_chesspiece(current.x,current.y).promoteTo(prom);
+                                break;
+                            }
+                            else{
+                                  std::cout << "INVALID INPUT"<<std::endl;
+                            }
+                        }
+                        
+                    }
                     this->gameState=1;
                     break;
                    }
