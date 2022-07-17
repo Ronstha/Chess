@@ -53,6 +53,7 @@ class Board{
       Board(){
         // parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -");
         parse_fen("rnbqkbnr/1ppppppp/p7/4P3/8/8/PPPP1PPP/RNBQKBNR b kqKQ -");
+        // parse_fen("rnbqkbnr/1ppppppp/p7/4P3/8/8/PPPP1PPP/R3KBNR w kqKQ -");
         // parse_fen("rnbqkbnr/1ppppppp/8/p7/8/4PQ2/PPPP1PPP/RNB1KBNR b");
       }
       void parse_fen(std:: string fen){
@@ -208,8 +209,23 @@ class Board{
             chessBoard[pc.position.x][b.y]=ChessPiece();   
         
            }
-         
-        
+         //for castling
+          if(displacement==2 && pc.rank==6){
+            if(pc.position.y>b.y){
+            chessBoard[b.x][b.y+1]=chessBoard[!this->currentTurn*7][0];
+            chessBoard[b.x][b.y+1].position=Box(b.x,b.y+1);
+            chessBoard[!this->currentTurn*7][0]=ChessPiece();
+            
+            }
+            else{
+            chessBoard[b.x][b.y-1]=chessBoard[!this->currentTurn*7][7];
+            chessBoard[b.x][b.y-1].position=Box(b.x,b.y-1);
+            chessBoard[!this->currentTurn*7][7]=ChessPiece();
+                
+            }
+            castling[this->currentTurn][0]=false;
+            castling[this->currentTurn][1]=false;
+        }
         chessBoard[pc.position.x][pc.position.y]=ChessPiece ();        
         pc.position=b;
         chessBoard[b.x][b.y]=pc;
@@ -219,7 +235,7 @@ class Board{
                 this->enpasant=Box(b.x+1+(-2*this->currentTurn),b.y);
 
             }
-        
+      
         if(legal){
           
           return this->check_checkmate(!pc.color);
@@ -269,12 +285,22 @@ class Board{
        for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 if(this->chessBoard[i][j].color==this->currentTurn){
-
+                    
                   moves+=chessBoard[i][j].totalmoves;
                 }
             }    
 
       }
       return moves;
+      }
+      bool ifRowBlank(int x,int r1,int r2){
+        for(int i=r1;i<r2+1;i++){
+            if(chessBoard[x][i].rank!=0){
+                return 0;
+                
+            }
+        }
+        return 1;
+
       }
 };

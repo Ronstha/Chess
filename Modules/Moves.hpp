@@ -177,13 +177,12 @@ this->rook(0,1,b);
       break;
     case 6:
     //king
- 
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             x=this->position.x-1+i;
             y=this->position.y-1+j;
             if(x>=0 && x<8 && y>=0 && y<8){
-    if(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color ){
+    if(b.chessBoard[x][y].rank==0||(b.chessBoard[x][y].rank!=0 && b.chessBoard[x][y].color!=this->color) ){
         moves[totalmoves]=Box(x,y);
         totalmoves+=1;
        }
@@ -191,10 +190,16 @@ this->rook(0,1,b);
             
         }
     }
-    
+    //castling
+    if((b.castling[b.currentTurn][1])&&(b.ifRowBlank(!b.currentTurn*7,1,3))){
+      this->moves[totalmoves]=Box(this->position.x,this->position.y-2);
+      totalmoves+=1;
+    }
+    if((b.castling[b.currentTurn][0])&&(b.ifRowBlank(!b.currentTurn*7,6,7))){
+      this->moves[totalmoves]=Box(this->position.x,this->position.y+2);
+      totalmoves+=1;
 
-    
-
+    }
 
       break;
     default:
@@ -220,8 +225,10 @@ void ChessPiece :: generateLegalMoves(Board &b){
       this->removeMoves(k);
     }
 
+
     
   }
+
 
 
 }
