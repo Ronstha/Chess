@@ -214,21 +214,43 @@ void ChessPiece :: removeMoves(int pos){
 
 }
 void ChessPiece :: generateLegalMoves(Board &b){ 
+  int displacement;
   Board temp;
+
  
   this->generatepseudoMoves(b);
-  int total=this->totalmoves;
-  for(int k=0;k<total;k++){
+  for(int k=0;k<this->totalmoves;k++){
     temp=b;
   
     if(temp.move_piece(*this,this->moves[k],false)){
+      moves[k].display();
       this->removeMoves(k);
+      k-=1;
+
+    }else if(this->rank==6){
+       displacement=sqrt(pow((this->position.x-moves[k].x),2)+pow((this->position.y-moves[k].y),2));
+    
+       if(displacement==2){
+        for(int i=0;i<k;i++){
+          if(moves[i]==Box(moves[k].x,(0.25*(moves[k].y-2))+3)){
+            Box(moves[k].x,(0.25*(moves[k].y-2))+3).display();
+            displacement=0;
+            break;
+          }
+        }
+        if(displacement!=0){
+          this->removeMoves(k);
+          k-=1;
+        }
+       }
     }
 
 
     
   }
-
+  
 
 
 }
+
+

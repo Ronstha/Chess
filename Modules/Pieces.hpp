@@ -98,6 +98,7 @@ class ChessPiece{
         this->rank=rank+1;
 
       }
+     
 
 
 };
